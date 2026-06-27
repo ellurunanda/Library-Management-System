@@ -11,11 +11,20 @@ export default function MemberDashboard() {
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setDebouncedSearch(search.trim());
+    }, 350);
+
+    return () => clearTimeout(timeoutId);
+  }, [search]);
 
   const loadData = async () => {
     try {
       const [booksRes, borrowedRes] = await Promise.all([
-        api.get("/books", { params: search ? { search } : {} }),
+        api.get("/books", { params: debouncedSearch ? { search: debouncedSearch } : {} }),
         api.get("/members/me/books"),
       ]);
       setBooks(booksRes.data.data || []);
@@ -28,7 +37,7 @@ export default function MemberDashboard() {
 
   useEffect(() => {
     loadData();
-  }, [search]);
+  }, [debouncedSearch]);
 
   const borrowBook = async (bookId) => {
     setError("");

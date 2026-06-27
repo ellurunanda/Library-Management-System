@@ -21,11 +21,20 @@ export default function LibrarianDashboard() {
   const [status, setStatus] = useState("");
   const [error, setError] = useState("");
   const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      setDebouncedSearch(search.trim());
+    }, 350);
+
+    return () => clearTimeout(timeoutId);
+  }, [search]);
 
   const loadData = async () => {
     try {
       const [booksRes, membersRes] = await Promise.all([
-        api.get("/books", { params: search ? { search } : {} }),
+        api.get("/books", { params: debouncedSearch ? { search: debouncedSearch } : {} }),
         api.get("/members"),
       ]);
       setBooks(booksRes.data.data || []);
@@ -38,7 +47,7 @@ export default function LibrarianDashboard() {
 
   useEffect(() => {
     loadData();
-  }, [search]);
+  }, [debouncedSearch]);
 
   const resetForm = () => {
     setBookForm(emptyBook);
