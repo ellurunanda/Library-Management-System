@@ -170,14 +170,14 @@ Base URL: `http://localhost:5000`
 
 An import-ready Postman collection is included at:
 
-`postman\Library Management System.postman_collection.json`
+`Library-Management-System.postman_collection.json`
 
 ### How to import
 
 1. Open Postman
 2. Click **Import**
 3. Choose file:
-   `postman\Library Management System.postman_collection.json`
+   `Library-Management-System.postman_collection.json`
 4. Import into your workspace
 
 ### Collection variables included
